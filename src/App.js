@@ -1,24 +1,66 @@
-import logo from './logo.svg';
 import './App.css';
+import {useEffect, useState} from 'react';
+import CounterSet from './counterSet';
 
 function App() {
+
+// MY CODE//
+  const [array, setArray] = useState([]);
+  const [isRunning, setisRunning] = useState(false);
+  const [intervalNum, setIntervalNum] = useState(5000);
+  
+  
+  useEffect(() => {
+  
+     if(isRunning === true){
+      let interval = setInterval(()=>{
+        const randomNum = Math.floor(Math.random() * 10)
+        setArray((prevArray)=>[ ...prevArray, randomNum])
+      },intervalNum) 
+     
+      return () => clearInterval(interval); 
+     }
+
+  }, [isRunning]);
+
+    const handleToggle = () =>{
+      setisRunning(!isRunning);
+
+    }
+    
+    const handleResetToggle = () =>{
+      setisRunning(false);
+      setArray([]);}
+
+    const takeInput = (event) =>{
+      setIntervalNum(event.target.value);
+
+    }
+    
+    const submitInput = (e) =>{
+      e.preventDefault();
+
+    }
+
+// let awaitFunc = async () => {
+// await counterSet();
+// }
+  //MYCODE
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+<div className="App">
+  <button onClick={handleToggle}>
+  {isRunning === false ? "Start" : "Stop"} 
+  </button>
+  <button onClick={handleResetToggle}>Reset</button>
+
+  <input type="text" value={intervalNum} onChange={takeInput} onSubmit={submitInput}></input>
+  <button onClick={submitInput}>Submit</button>
+
+
+  <CounterSet array={array}></CounterSet>
+ 
+</div>
   );
 }
 
